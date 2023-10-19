@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "00 22 * * *"
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checkout v2fly/domain-list-community
+        uses: actions/checkout@v3
+        with:
+          repository: v2fly/domain-list-community
+          ref: master
+          path: domain-list-community
+
+      - name: Customizations
+        run: |
+          # remove `github` from `microsoft`
+          cp domain-list-community/data/microsoft domain-list-community/data/microsoft-without-github
+          sed -i '/include:github/d' domain-list-community/data/microsoft-without-github
+
+      - name: Convert
+        run: |
+          python3 convert.py
+
+      - name: Git push domain-set to corresponding branch
+        env:
+          BRANCH: domain-set
+        run: |
+          cd $BRANCH || exit 1
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config http.postBuffer 524288000
+          git config https.postBuffer 524288000
+          git config core.compression -1
+          git add .
+          git commit -m "Released at $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M')"
+          git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" HEAD:$BRANCH
+
+      - name: Git push rule-set to corresponding branch
+        env:
+          BRANCH: rule-set
+        run: |-
+          cd $BRANCH || exit 1
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config http.postBuffer 524288000
+          git config https.postBuffer 524288000
+          git config core.compression -1
+          git add .
+          git commit -m "Released at $(TZ='Asia/Shanghai' date '+%Y-%m-%d %H:%M')"
+          git push --force --quiet "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" HEAD:$BRANCH
