@@ -1,4 +1,3 @@
-google.com
 account.jetbrains.com
 urlsec.qq.com
 firebaselogging-pa.googleapis.com
