@@ -39,6 +39,9 @@ jobs:
           curl -sSL $PETERLOWE_REJECT_URL | perl -ne '/^127\.0\.0\.1\s([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})$/ && print "$1\n"' >> temp-reject.txt
           curl -sSL $DANPOLLOCK_REJECT_URL | perl -ne '/^127\.0\.0\.1\s([-_0-9a-zA-Z]+(\.[-_0-9a-zA-Z]+){1,64})/ && print "$1\n"' | sed '1d' >> temp-reject.txt
 
+          # 添加自定义清单内容
+          cat reject.txt >> temp-reject.txt
+
           # 生成排序的带有重复的 REJECT 清单
           cat temp-reject.txt | sort --ignore-case -u > reject-list-with-redundant
 
