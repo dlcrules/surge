@@ -126,6 +126,51 @@ jobs:
           curl -sSL $WIN_UPDATE | grep "0.0.0.0" | awk '{print $2}' > win-update.txt
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > ./domain-list-community/data/win-extra
           curl -sSL $WIN_EXTRA | grep "0.0.0.0" | awk '{print $2}' > win-extra.txt
+
+          
+      - name: Generate direct.txt file
+        run: |
+          grep -Ev "^(regexp|keyword):" direct-list.txt | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > ./domain-list-community/data/my_direct.txt
+          grep -Ev "^(regexp|keyword|full):" direct-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_direct.txt
+
+      - name: Generate proxy.txt file
+        run: |
+          grep -Ev "^(regexp|keyword):" proxy-list.txt | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > ./domain-list-community/data/my_proxy.txt
+          | grep -Ev "^(regexp|keyword|full):" proxy-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_proxy.txt
+          
+      - name: Generate reject.txt file
+        run: |
+          grep -Ev "^(regexp|keyword):" reject.txt | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' > ./domain-list-community/data/my_reject.txt
+
+      #- name: Generate private.txt file
+      #  run: |
+      #    curl -sSL ${custom_private} | awk -F ':' '/^full:/ {printf "%s\n", $2}' > private.txt
+      #    curl -sSL ${custom_private} | awk -F ':' '/^domain:/ {printf ".%s\n", $2}' >> private.txt
+
+      #- name: Generate gfw.txt file
+      #  run: |
+      #    curl -sSL ${Loyalsoldier_gfw} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' > gfw.txt
+
+      #- name: Generate greatfire.txt file
+      #  run: |
+      #    curl -sSL ${Loyalsoldier_greatfire} | grep -Ev "^(regexp|keyword):" | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' > greatfire.txt
+
+      #- name: Generate tld-not-cn.txt file
+      #  run: |
+      #    curl -sSL ${custom_tld_not_cn} | grep -E "^domain:" | awk -F ':' '{printf ".%s\n", $2}' > tld-not-cn.txt
+
+      #- name: Generate cncidr.txt file
+      #  run: |
+      #    curl -sSL ${cn_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > cncidr.txt
+      #    curl -sSL ${cn_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> cncidr.txt
+
+      #- name: Generate telegramcidr.txt file
+      #  run: |
+      #    curl -sSL ${telegram_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > telegramcidr.txt
+      #    curl -sSL ${telegram_cidr} | perl -ne '/^(\d{1,3}(\.\d{1,3}){3}\/\d{1,2})/ && print "IP-CIDR,$1\n"' > ruleset/telegramcidr.txt
+      #    curl -sSL ${telegram_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> telegramcidr.txt
+      #    curl -sSL ${telegram_cidr} | grep ":" | perl -ne '/(.+\/\d+)/ && print "IP-CIDR6,$1\n"' >> ruleset/telegramcidr.txt
+
           
       - name: Customizations
         run: |
