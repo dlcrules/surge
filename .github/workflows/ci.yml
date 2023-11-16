@@ -130,17 +130,17 @@ jobs:
           
       - name: Generate direct.txt file
         run: |
-          grep -Ev "^(regexp|keyword):" direct-list.txt | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > ./domain-list-community/data/my_direct.txt
-          grep -Ev "^(regexp|keyword|full):" direct-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_direct.txt
+          grep -Ev "^(regexp|keyword):" direct-list.txt | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > ./domain-list-community/data/my_direct
+          grep -Ev "^(regexp|keyword|full):" direct-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_direct
 
       - name: Generate proxy.txt file
         run: |
           grep -Ev "^(regexp|keyword):" proxy-list.txt | perl -ne '/^(full:)([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print "$2\n"' > ./domain-list-community/data/my_proxy.txt
-          grep -Ev "^(regexp|keyword|full):" proxy-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_proxy.txt
+          grep -Ev "^(regexp|keyword|full):" proxy-list.txt | perl -ne '/^(domain:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' >> ./domain-list-community/data/my_proxy
           
       - name: Generate reject.txt file
         run: |
-          grep -Ev "^(regexp|keyword):" reject.txt | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' > ./domain-list-community/data/my_reject.txt
+          grep -Ev "^(regexp|keyword):" reject.txt | perl -ne '/^(domain:|full:)?([-_a-zA-Z0-9]+(\.[-_a-zA-Z0-9]+)*)/ && print ".$2\n"' > ./domain-list-community/data/my_reject
 
       #- name: Generate private.txt file
       #  run: |
