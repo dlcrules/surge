@@ -1,0 +1,3 @@
+crl.pki.goog
+ocsp.pki.goog
+pki-goog.l.google.com
